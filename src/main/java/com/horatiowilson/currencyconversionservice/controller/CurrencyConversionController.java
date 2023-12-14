@@ -24,4 +24,14 @@ public class CurrencyConversionController {
         currencyConversionDto.setQuantity(quantity);
         return currencyConversionService.calculateCurrencyConversion(currencyConversionDto);
     }
+
+    @GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
+    public CurrencyConversionDto calculateCurrencyConversionFeign(
+            @PathVariable String from, @PathVariable String to, @PathVariable BigDecimal quantity) {
+        CurrencyConversionDto currencyConversionDto = new CurrencyConversionDto();
+        currencyConversionDto.setFrom(from);
+        currencyConversionDto.setTo(to);
+        currencyConversionDto.setQuantity(quantity);
+        return currencyConversionService.calculateCurrencyConversionFeign(currencyConversionDto);
+    }
 }

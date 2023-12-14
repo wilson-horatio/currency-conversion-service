@@ -1,6 +1,8 @@
 package com.horatiowilson.currencyconversionservice.service;
 
 import com.horatiowilson.currencyconversionservice.dto.CurrencyConversionDto;
+import com.horatiowilson.currencyconversionservice.proxy.CurrencyExchangeProxy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,6 +11,10 @@ import java.util.HashMap;
 
 @Service
 public class CurrencyConversionService {
+
+    @Autowired
+    CurrencyExchangeProxy proxy;
+
     public CurrencyConversionDto calculateCurrencyConversion(CurrencyConversionDto currencyConversionDto) {
 
         HashMap<String, String> uriVariables = new HashMap<>();
@@ -18,6 +24,15 @@ public class CurrencyConversionService {
         // Calculate the currency conversion
         ResponseEntity<CurrencyConversionDto> responseEntity = new RestTemplate().getForEntity("http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversionDto.class, uriVariables);
         CurrencyConversionDto currencyConversionDto1 = responseEntity.getBody();
+        return calculateCurrencyConversion(currencyConversionDto, currencyConversionDto1);
+    }
+
+    public CurrencyConversionDto calculateCurrencyConversionFeign(CurrencyConversionDto currencyConversionDto) {
+        CurrencyConversionDto currencyConversionDto1 = proxy.retrieveExchangeValue(currencyConversionDto.getFrom(), currencyConversionDto.getTo());
+        return calculateCurrencyConversion(currencyConversionDto, currencyConversionDto1);
+    }
+
+    private CurrencyConversionDto calculateCurrencyConversion(CurrencyConversionDto currencyConversionDto, CurrencyConversionDto currencyConversionDto1) {
         if (currencyConversionDto1 != null) {
             return new CurrencyConversionDto(
                     currencyConversionDto1.getId(),
