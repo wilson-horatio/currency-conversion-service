@@ -22,7 +22,9 @@ public class CurrencyConversionController {
         currencyConversionDto.setFrom(from);
         currencyConversionDto.setTo(to);
         currencyConversionDto.setQuantity(quantity);
-        return currencyConversionService.calculateCurrencyConversion(currencyConversionDto);
+        CurrencyConversionDto dtoToReturn = currencyConversionService.calculateCurrencyConversion(currencyConversionDto);
+        dtoToReturn.setEnvironment(dtoToReturn.getEnvironment() + " " + "rest template");
+        return dtoToReturn;
     }
 
     @GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
@@ -32,6 +34,8 @@ public class CurrencyConversionController {
         currencyConversionDto.setFrom(from);
         currencyConversionDto.setTo(to);
         currencyConversionDto.setQuantity(quantity);
-        return currencyConversionService.calculateCurrencyConversionFeign(currencyConversionDto);
+        CurrencyConversionDto dtoToReturn = currencyConversionService.calculateCurrencyConversionFeign(currencyConversionDto);
+        dtoToReturn.setEnvironment(dtoToReturn.getEnvironment() + " " + "feign");
+        return dtoToReturn;
     }
 }
