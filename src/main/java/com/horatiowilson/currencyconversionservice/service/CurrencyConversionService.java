@@ -24,6 +24,7 @@ public class CurrencyConversionService {
         uriVariables.put("from", currencyConversionDto.getFrom());
         uriVariables.put("to", currencyConversionDto.getTo());
         // Calculate the currency conversion
+        // @TODO: change hardcoded localhost to docker/kubernetes service call.
         ResponseEntity<CurrencyConversionDto> responseEntity = restTemplate.getForEntity("http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversionDto.class, uriVariables);
         CurrencyConversionDto currencyConversionDto1 = responseEntity.getBody();
         return calculateCurrencyConversion(currencyConversionDto, currencyConversionDto1);
